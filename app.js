@@ -46,4 +46,57 @@ function createList() {
 
       draggableList.appendChild(listItem);
     });
+
+  addEventListeners();
+}
+
+function dragStart() {
+  // console.log("dragStart");
+  dragStartIndex = +this.closest("li").getAttribute("data-index");
+}
+
+function dragDrop() {
+  // console.log('Event: ', 'drop');
+  const dragEndIndex = +this.getAttribute('data-index');
+  swapItems(dragStartIndex, dragEndIndex);
+
+  this.classList.remove('over');
+}
+
+function dragEnter() {
+  // console.log("dragEnter");
+  this.classList.add("over");
+}
+
+function dragLeave() {
+  // console.log("dragleave");
+  this.classList.remove("over");
+}
+
+function dragOver(e) {
+  // console.log("dragOver");
+  e.preventDefault();
+}
+
+function swapItems(fromIndex, toIndex) {
+  const itemOne = listItems[fromIndex].querySelector('.draggable');
+  const itemTwo = listItems[toIndex].querySelector('.draggable');
+
+  listItems[fromIndex].appendChild(itemTwo);
+  listItems[toIndex].appendChild(itemOne);
+}
+
+function addEventListeners() {
+  const draggables = document.querySelectorAll(".draggable");
+  const dragListItems = document.querySelectorAll(".draggable-list li");
+
+  draggables.forEach((draggable) => {
+    draggable.addEventListener("dragstart", dragStart);
+  });
+  dragListItems.forEach((item) => {
+    item.addEventListener("drop", dragDrop);
+    item.addEventListener("dragenter", dragEnter);
+    item.addEventListener("dragleave", dragLeave);
+    item.addEventListener("dragover", dragOver);
+  });
 }
